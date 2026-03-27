@@ -29,14 +29,19 @@ export default function AuthForm() {
     setError("");
 
     if (isSignUp) {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
       if (error) {
         setError(error.message);
-      } else {
+      } else if (data.session) {
+        // Auto-confirmed — go straight to naming
         router.push("/name-your-lemming");
+      } else {
+        // Email confirmation required
+        setError("Check your email to confirm your account, then sign in.");
+        setIsSignUp(false);
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
