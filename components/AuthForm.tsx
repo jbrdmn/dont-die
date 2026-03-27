@@ -2,12 +2,16 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AuthForm() {
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const [password, setPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const supabase = createClient();
+  const router = useRouter();
 
   const signInWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
@@ -18,17 +22,33 @@ export default function AuthForm() {
     });
   };
 
-  const signInWithEmail = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || !password.trim()) return;
     setLoading(true);
-    await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    setSent(true);
+    setError("");
+
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        router.push("/name-your-lemming");
+      }
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        router.push("/game");
+      }
+    }
     setLoading(false);
   };
 
@@ -65,28 +85,42 @@ export default function AuthForm() {
         <div className="flex-1 h-px bg-gray-700" />
       </div>
 
-      {sent ? (
-        <div className="text-center pixel-font text-green-400 text-sm">
-          Check your email for a magic link!
-        </div>
-      ) : (
-        <form onSubmit={signInWithEmail} className="space-y-3">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-lg pixel-font text-white text-center text-sm focus:border-sky-400 focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full pixel-font bg-sky-500 hover:bg-sky-400 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg text-sm"
-          >
-            {loading ? "Sending..." : "Send Magic Link"}
-          </button>
-        </form>
-      )}
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-lg pixel-font text-white text-center text-sm focus:border-sky-400 focus:outline-none"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="password"
+          minLength={6}
+          className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-lg pixel-font text-white text-center text-sm focus:border-sky-400 focus:outline-none"
+        />
+        {error && (
+          <div className="pixel-font text-red-400 text-[10px] text-center">
+            {error}
+          </div>
+        )}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full pixel-font bg-sky-500 hover:bg-sky-400 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg text-sm"
+        >
+          {loading ? "..." : isSignUp ? "SIGN UP" : "SIGN IN"}
+        </button>
+      </form>
+
+      <button
+        onClick={() => { setIsSignUp(!isSignUp); setError(""); }}
+        className="w-full pixel-font text-gray-500 hover:text-gray-300 text-[10px] text-center"
+      >
+        {isSignUp ? "Already have an account? Sign in" : "No account? Sign up"}
+      </button>
     </div>
   );
 }
