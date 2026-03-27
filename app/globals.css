@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #111827;
+  --background: #030712;
   --foreground: #f3f4f6;
 }
 
@@ -13,160 +13,109 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
 }
 
 .pixel-font {
   font-family: var(--font-pixel), monospace;
 }
 
-.image-rendering-pixelated {
-  image-rendering: pixelated;
+/* ===== Walk Animation: two-frame sprite swap ===== */
+
+@keyframes frame-toggle {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-/* ===== Lemming Pixel Art Animations ===== */
+.animate-walk-frame1 {
+  animation: frame-toggle 0.5s step-end infinite, walk-bob 0.5s ease-in-out infinite;
+}
 
-@keyframes walk-legs {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.animate-walk-frame2 {
+  animation: frame-toggle 0.5s step-end infinite 0.25s, walk-bob 0.5s ease-in-out infinite;
+  opacity: 0;
 }
 
 @keyframes walk-bob {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-1px); }
+  50% { transform: translateY(-2px); }
 }
+
+/* ===== Panic Legs ===== */
+
+.animate-panic-legs-a {
+  animation: frame-toggle 0.2s step-end infinite;
+}
+
+.animate-panic-legs-b {
+  animation: frame-toggle 0.2s step-end infinite 0.1s;
+  opacity: 0;
+}
+
+/* ===== Other Character Animations ===== */
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  75% { transform: translateX(2px); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
 }
 
 @keyframes fall-tumble {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
 }
 
 @keyframes zzz-float {
-  0% { transform: translateY(0) translateX(0); opacity: 1; }
-  100% { transform: translateY(-12px) translateX(6px); opacity: 0; }
+  0% { transform: translateY(0) translateX(0); opacity: 0.8; }
+  100% { transform: translateY(-16px) translateX(8px); opacity: 0; }
 }
 
-@keyframes panic-eyes {
-  0%, 90% { transform: scale(1); }
-  95% { transform: scale(1.3); }
-  100% { transform: scale(1); }
-}
+.animate-shake { animation: shake 0.12s ease-in-out infinite; }
+.animate-fall-tumble { animation: fall-tumble 2.5s ease-in forwards; }
+.animate-zzz { animation: zzz-float 2s ease-out infinite; }
+.animate-zzz-delay { animation: zzz-float 2s ease-out infinite 0.7s; }
+.animate-zzz-delay2 { animation: zzz-float 2s ease-out infinite 1.4s; }
 
-/* ===== Cloud Animations ===== */
+/* ===== Clouds ===== */
 
-@keyframes cloud-drift-1 {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(30px); }
-}
+@keyframes cloud-drift-1 { 0% { transform: translateX(0); } 100% { transform: translateX(30px); } }
+@keyframes cloud-drift-2 { 0% { transform: translateX(0); } 100% { transform: translateX(-20px); } }
+@keyframes cloud-drift-3 { 0% { transform: translateX(0); } 100% { transform: translateX(40px); } }
 
-@keyframes cloud-drift-2 {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-20px); }
-}
+.animate-cloud-1 { animation: cloud-drift-1 12s ease-in-out infinite alternate; }
+.animate-cloud-2 { animation: cloud-drift-2 10s ease-in-out infinite alternate; }
+.animate-cloud-3 { animation: cloud-drift-3 14s ease-in-out infinite alternate; }
 
-@keyframes cloud-drift-3 {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(40px); }
-}
-
-/* ===== Button Animations ===== */
+/* ===== UI Animations ===== */
 
 @keyframes save-glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3), 0 0 60px rgba(239, 68, 68, 0.1); }
+  0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3), 0 0 30px rgba(239, 68, 68, 0.15); }
+  50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.5), 0 0 50px rgba(239, 68, 68, 0.2); }
 }
-
-@keyframes save-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-}
-
-/* ===== Countdown Animations ===== */
 
 @keyframes urgent-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.4; }
 }
 
 @keyframes danger-shake {
   0%, 100% { transform: translateX(0); }
-  10% { transform: translateX(-1px); }
-  30% { transform: translateX(1px); }
-  50% { transform: translateX(-1px); }
-  70% { transform: translateX(1px); }
-  90% { transform: translateX(-1px); }
+  20% { transform: translateX(-1px); }
+  40% { transform: translateX(1px); }
+  60% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
 }
 
-/* ===== Landing Page Animations ===== */
+.animate-save-glow { animation: save-glow 2s ease-in-out infinite; }
+.animate-urgent-pulse { animation: urgent-pulse 1s ease-in-out infinite; }
+.animate-danger-shake { animation: danger-shake 0.3s ease-in-out infinite, urgent-pulse 0.5s ease-in-out infinite; }
+
+/* ===== Landing ===== */
 
 @keyframes landing-walk {
-  0% { left: -40px; }
-  100% { left: calc(100% + 40px); }
+  0% { left: -50px; }
+  100% { left: calc(100% + 50px); }
 }
 
-/* ===== Utility Classes ===== */
-
-.animate-walk-bob {
-  animation: walk-bob 0.4s ease-in-out infinite;
-}
-
-.animate-walk-legs-a {
-  animation: walk-legs 0.3s ease-in-out infinite;
-}
-
-.animate-walk-legs-b {
-  animation: walk-legs 0.3s ease-in-out infinite 0.15s;
-}
-
-.animate-shake {
-  animation: shake 0.15s ease-in-out infinite;
-}
-
-.animate-fall-tumble {
-  animation: fall-tumble 2s ease-in forwards;
-}
-
-.animate-zzz {
-  animation: zzz-float 2s ease-out infinite;
-}
-
-.animate-zzz-delay {
-  animation: zzz-float 2s ease-out infinite 0.7s;
-}
-
-.animate-zzz-delay2 {
-  animation: zzz-float 2s ease-out infinite 1.4s;
-}
-
-.animate-cloud-1 {
-  animation: cloud-drift-1 10s ease-in-out infinite alternate;
-}
-
-.animate-cloud-2 {
-  animation: cloud-drift-2 8s ease-in-out infinite alternate;
-}
-
-.animate-cloud-3 {
-  animation: cloud-drift-3 12s ease-in-out infinite alternate;
-}
-
-.animate-save-glow {
-  animation: save-glow 2s ease-in-out infinite, save-pulse 2s ease-in-out infinite;
-}
-
-.animate-urgent-pulse {
-  animation: urgent-pulse 1s ease-in-out infinite;
-}
-
-.animate-danger-shake {
-  animation: danger-shake 0.5s ease-in-out infinite, urgent-pulse 0.5s ease-in-out infinite;
-}
-
-.animate-landing-walk {
-  animation: landing-walk 8s linear infinite;
-}
+.animate-landing-walk { animation: landing-walk 8s linear infinite; }

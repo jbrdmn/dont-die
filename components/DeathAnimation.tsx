@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 interface DeathAnimationProps {
   lemmingName: string;
   streak: number;
@@ -13,56 +11,50 @@ export default function DeathAnimation({
   streak,
   onCreateNew,
 }: DeathAnimationProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [newName, setNewName] = useState("");
-
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-gray-900 border-4 border-red-500 rounded-xl p-8 max-w-md w-full text-center space-y-6">
-        <div className="text-6xl animate-bounce">💀</div>
-        <h2 className="text-2xl pixel-font text-red-400">YOUR LEMMING DIED</h2>
-        <p className="pixel-font text-gray-300">
-          <span className="text-white font-bold">{lemmingName}</span> walked off
-          the cliff.
-        </p>
-        <p className="pixel-font text-gray-500 text-sm">
-          Survived {streak} {streak === 1 ? "day" : "days"}
-        </p>
+    <main className="flex-1 flex items-center justify-center bg-gray-950 p-4">
+      <div className="max-w-sm w-full text-center space-y-8">
+        {/* Skull with glow */}
+        <div className="relative inline-block">
+          <div
+            className="text-7xl animate-bounce"
+            style={{ filter: "drop-shadow(0 0 20px rgba(239,68,68,0.4))" }}
+          >
+            &#128128;
+          </div>
+        </div>
 
-        {!showForm ? (
+        <div className="space-y-3">
+          <h2 className="pixel-font text-red-500 text-lg" style={{ textShadow: "0 0 20px rgba(239,68,68,0.3)" }}>
+            DEAD
+          </h2>
+          <p className="pixel-font text-gray-400 text-xs leading-relaxed">
+            <span className="text-white">{lemmingName}</span> walked off the cliff.
+          </p>
+          {streak > 0 && (
+            <p className="pixel-font text-gray-600" style={{ fontSize: 9 }}>
+              survived {streak} {streak === 1 ? "day" : "days"}
+            </p>
+          )}
+        </div>
+
+        <div className="pt-4">
           <button
-            onClick={() => setShowForm(true)}
-            className="pixel-font bg-green-500 hover:bg-green-400 text-white px-6 py-3 rounded-lg text-lg"
+            onClick={onCreateNew}
+            className="w-full pixel-font bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-6 py-4 rounded-2xl text-sm transition-all border border-gray-700 hover:border-gray-600 touch-manipulation active:scale-[0.97]"
           >
-            ADOPT A NEW LEMMING
+            TRY AGAIN
           </button>
-        ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (newName.trim()) onCreateNew();
-            }}
-            className="space-y-4"
-          >
-            <input
-              type="text"
-              maxLength={20}
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder="Name your new lemming..."
-              className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-lg pixel-font text-white text-center focus:border-green-400 focus:outline-none"
-              autoFocus
-            />
-            <button
-              type="submit"
-              disabled={!newName.trim()}
-              className="pixel-font bg-green-500 hover:bg-green-400 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg w-full"
-            >
-              BEGIN AGAIN
-            </button>
-          </form>
-        )}
+        </div>
+
+        <a
+          href="/graveyard"
+          className="pixel-font text-gray-700 hover:text-gray-500 transition-colors inline-block"
+          style={{ fontSize: 8 }}
+        >
+          VISIT GRAVEYARD
+        </a>
       </div>
-    </div>
+    </main>
   );
 }

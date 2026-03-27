@@ -23,7 +23,6 @@ export default function GamePage() {
     saveLemming,
   } = useLemming();
 
-  // If no lemming exists and not dead, redirect to naming
   useEffect(() => {
     if (!loading && !lemming && !justDied) {
       router.push("/name-your-lemming");
@@ -32,93 +31,86 @@ export default function GamePage() {
 
   if (loading) {
     return (
-      <main className="flex-1 flex items-center justify-center">
-        <div className="pixel-font text-gray-400 animate-urgent-pulse">
+      <main className="flex-1 flex items-center justify-center bg-gray-950">
+        <div className="pixel-font text-gray-500 animate-urgent-pulse text-sm">
           Loading...
         </div>
       </main>
     );
   }
 
-  // Dead lemming — show death + new lemming form
   if (justDied) {
     return (
-      <>
-        <main className="flex-1 flex items-center justify-center p-3">
-          <div className="max-w-lg w-full space-y-6">
-            <LemmingScene
-              progress={1}
-              savedToday={false}
-              isAlive={false}
-              justDied={true}
-            />
-          </div>
-        </main>
-        <DeathAnimation
-          lemmingName={lemming?.name ?? "Your lemming"}
-          streak={lemming?.streak ?? 0}
-          onCreateNew={async () => {
-            setJustDied(false);
-            router.push("/name-your-lemming");
-          }}
-        />
-      </>
+      <DeathAnimation
+        lemmingName={lemming?.name ?? "Your lemming"}
+        streak={lemming?.streak ?? 0}
+        onCreateNew={() => {
+          setJustDied(false);
+          router.push("/name-your-lemming");
+        }}
+      />
     );
   }
 
   if (!lemming) return null;
 
   return (
-    <main className="flex-1 flex flex-col min-h-full p-3 sm:p-4 pb-28">
-      <div className="max-w-lg w-full mx-auto flex flex-col flex-1 gap-4">
-        {/* Lemming name */}
-        <div className="text-center pt-2">
-          <h1 className="pixel-font text-white text-base sm:text-lg">
+    <main className="flex-1 flex flex-col bg-gray-950 overflow-hidden">
+      {/* Top bar: name + streak */}
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-2">
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{
+              background: savedToday ? "#22c55e" : "#ef4444",
+              boxShadow: savedToday
+                ? "0 0 6px #22c55e"
+                : "0 0 6px #ef4444",
+            }}
+          />
+          <h1 className="pixel-font text-white text-sm sm:text-base truncate max-w-[140px]">
             {lemming.name}
           </h1>
         </div>
+        <StreakCounter streak={lemming.streak} />
+      </div>
 
-        {/* Scene - hero element, takes most space */}
-        <LemmingScene
-          progress={progress}
-          savedToday={savedToday}
-          isAlive={lemming.is_alive}
-          justDied={false}
-        />
-
-        {/* Stats row */}
-        <div className="flex justify-between items-start gap-2">
-          <StreakCounter streak={lemming.streak} />
-          <CountdownTimer countdown={countdown} msRemaining={msRemaining} />
-        </div>
-
-        {/* Just saved feedback */}
-        {justSaved && (
-          <div className="text-center pixel-font text-green-400 text-xs animate-urgent-pulse">
-            Your lemming is safe! See you tomorrow.
-          </div>
-        )}
-
-        {/* Footer link */}
-        <div className="text-center mt-auto pt-2">
-          <a
-            href="/graveyard"
-            className="pixel-font text-gray-600 hover:text-gray-400 underline"
-            style={{ fontSize: 9 }}
-          >
-            Visit the Graveyard
-          </a>
+      {/* Scene - the hero */}
+      <div className="flex-1 flex items-center px-3">
+        <div className="w-full max-w-2xl mx-auto">
+          <LemmingScene
+            progress={progress}
+            savedToday={savedToday}
+            isAlive={lemming.is_alive}
+            justDied={false}
+          />
         </div>
       </div>
 
-      {/* Sticky save button at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800 z-50">
-        <div className="max-w-lg mx-auto">
-          <SaveButton
-            onSave={saveLemming}
-            disabled={savedToday || !lemming.is_alive}
-            savedToday={savedToday}
-          />
+      {/* Bottom area: timer + save */}
+      <div className="px-4 pb-4 pt-2 space-y-3">
+        <CountdownTimer countdown={countdown} msRemaining={msRemaining} />
+
+        <SaveButton
+          onSave={saveLemming}
+          disabled={savedToday || !lemming.is_alive}
+          savedToday={savedToday}
+        />
+
+        {justSaved && (
+          <div className="text-center pixel-font text-green-400 animate-urgent-pulse" style={{ fontSize: 10 }}>
+            Safe! See you tomorrow.
+          </div>
+        )}
+
+        <div className="text-center pt-1 pb-1">
+          <a
+            href="/graveyard"
+            className="pixel-font text-gray-700 hover:text-gray-500 transition-colors"
+            style={{ fontSize: 8 }}
+          >
+            GRAVEYARD
+          </a>
         </div>
       </div>
     </main>

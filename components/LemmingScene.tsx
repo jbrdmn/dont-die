@@ -23,11 +23,19 @@ export default function LemmingScene({
 
   return (
     <div
-      className="relative w-full rounded-xl overflow-hidden border-4 border-gray-800 shadow-xl image-rendering-pixelated"
-      style={{ height: "clamp(256px, 45vw, 384px)" }}
+      className="relative w-full rounded-2xl overflow-hidden border-2 border-gray-700/50 shadow-2xl shadow-black/50"
+      style={{ height: "clamp(280px, 50vh, 420px)" }}
     >
       <CliffBackground />
       <Lemming state={state} progress={progress} />
+
+      {/* Subtle vignette overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          boxShadow: "inset 0 0 60px rgba(0,0,0,0.3)",
+        }}
+      />
     </div>
   );
 }

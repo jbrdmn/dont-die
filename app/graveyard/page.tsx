@@ -7,20 +7,20 @@ export default function GraveyardPage() {
   const { dead, loading } = useGraveyard();
 
   return (
-    <main className="flex-1 p-3 sm:p-6 max-w-4xl mx-auto w-full">
+    <main className="flex-1 p-4 sm:p-6 max-w-2xl mx-auto w-full bg-gray-950">
       <div className="space-y-6">
-        <div className="text-center space-y-2 pt-2">
-          <h1 className="text-xl sm:text-3xl pixel-font text-gray-300">
+        <div className="text-center space-y-2 pt-4">
+          <h1 className="pixel-font text-gray-400 text-base sm:text-xl">
             THE GRAVEYARD
           </h1>
-          <p className="pixel-font text-gray-600" style={{ fontSize: 9 }}>
-            Here lie the lemmings that weren&apos;t saved in time.
+          <p className="pixel-font text-gray-700" style={{ fontSize: 8 }}>
+            They weren&apos;t saved in time.
           </p>
         </div>
 
         {loading ? (
-          <div className="text-center pixel-font text-gray-500 animate-urgent-pulse">
-            Loading the dead...
+          <div className="text-center pixel-font text-gray-600 text-xs animate-urgent-pulse py-12">
+            ...
           </div>
         ) : (
           <GraveyardGrid lemmings={dead} />
@@ -29,9 +29,10 @@ export default function GraveyardPage() {
         <div className="text-center pb-4">
           <a
             href="/"
-            className="pixel-font text-gray-600 hover:text-gray-400 text-xs underline"
+            className="pixel-font text-gray-700 hover:text-gray-500 transition-colors"
+            style={{ fontSize: 8 }}
           >
-            &larr; Back to the living
+            &larr; BACK
           </a>
         </div>
       </div>

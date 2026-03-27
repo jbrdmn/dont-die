@@ -1,55 +1,35 @@
 "use client";
 
-/*
- * Pixel-art cliff scene with parallax sky, clouds, grass, cliff edge, and abyss.
- * Mobile-first: taller (h-64 min), visually rich.
- */
-
-// Pixel cloud using box-shadow technique
-function PixelCloud({ top, left, scale = 1, className = "" }: { top: number; left: string; scale?: number; className?: string }) {
-  const c = "#e8e8e8";
-  const w = "#ffffff";
+function PixelCloud({
+  top,
+  left,
+  s = 1,
+  cls = "",
+}: {
+  top: string;
+  left: string;
+  s?: number;
+  cls?: string;
+}) {
+  const w = "#fff";
+  const c = "#e0e8f0";
   return (
     <div
-      className={className}
+      className={cls}
       style={{
         position: "absolute",
         top,
         left,
         width: 1,
         height: 1,
-        transform: `scale(${2 * scale})`,
+        transform: `scale(${3 * s})`,
         transformOrigin: "top left",
         boxShadow: `
-          2px 0px ${w}, 3px 0px ${w}, 4px 0px ${w}, 5px 0px ${w},
-          1px 1px ${w}, 2px 1px ${c}, 3px 1px ${w}, 4px 1px ${c}, 5px 1px ${w}, 6px 1px ${w},
-          0px 2px ${w}, 1px 2px ${w}, 2px 2px ${w}, 3px 2px ${w}, 4px 2px ${w}, 5px 2px ${w}, 6px 2px ${w}, 7px 2px ${w},
-          0px 3px ${c}, 1px 3px ${w}, 2px 3px ${w}, 3px 3px ${c}, 4px 3px ${w}, 5px 3px ${w}, 6px 3px ${c}, 7px 3px ${w},
-          1px 4px ${c}, 2px 4px ${c}, 3px 4px ${c}, 4px 4px ${c}, 5px 4px ${c}, 6px 4px ${c}
-        `,
-        opacity: 0.9,
-      }}
-    />
-  );
-}
-
-// Small pixel flower
-function PixelFlower({ bottom, left, color }: { bottom: number; left: string; color: string }) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        bottom,
-        left,
-        width: 1,
-        height: 1,
-        transform: "scale(2)",
-        transformOrigin: "bottom left",
-        boxShadow: `
-          1px 0px ${color},
-          0px 1px ${color}, 1px 1px #ffff00, 2px 1px ${color},
-          1px 2px ${color},
-          1px 3px #22c55e, 1px 4px #16a34a
+          2px 0 ${w},3px 0 ${w},4px 0 ${w},5px 0 ${w},
+          1px 1px ${w},2px 1px ${c},3px 1px ${w},4px 1px ${c},5px 1px ${w},6px 1px ${w},
+          0 2px ${w},1px 2px ${w},2px 2px ${w},3px 2px ${w},4px 2px ${w},5px 2px ${w},6px 2px ${w},7px 2px ${w},
+          0 3px ${c},1px 3px ${w},2px 3px ${w},3px 3px ${c},4px 3px ${w},5px 3px ${w},6px 3px ${c},7px 3px ${w},
+          1px 4px ${c},2px 4px ${c},3px 4px ${c},4px 4px ${c},5px 4px ${c},6px 4px ${c}
         `,
       }}
     />
@@ -58,144 +38,269 @@ function PixelFlower({ bottom, left, color }: { bottom: number; left: string; co
 
 export default function CliffBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Sky gradient */}
+    <div className="absolute inset-0 overflow-hidden select-none">
+      {/* Sky */}
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(180deg, #4a90d9 0%, #87ceeb 40%, #b8e4f0 70%, #d4f0f8 100%)",
+          background:
+            "linear-gradient(180deg, #1a3a5c 0%, #2d6a9f 25%, #5ba3d9 50%, #87ceeb 75%, #b8e4f0 100%)",
         }}
       />
 
-      {/* Sun */}
+      {/* Stars (subtle, top area only) */}
+      {[
+        [8, 5],
+        [22, 12],
+        [45, 3],
+        [67, 8],
+        [82, 14],
+        [35, 18],
+        [55, 6],
+        [15, 20],
+        [75, 2],
+        [90, 10],
+      ].map(([l, t], i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${l}%`,
+            top: `${t}%`,
+            width: i % 3 === 0 ? 2 : 1,
+            height: i % 3 === 0 ? 2 : 1,
+            background: "#fff",
+            opacity: 0.15 + (i % 4) * 0.1,
+          }}
+        />
+      ))}
+
+      {/* Moon/Sun glow */}
       <div
         className="absolute"
         style={{
-          top: 12,
-          right: 24,
+          top: "8%",
+          right: "12%",
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(255,247,160,0.9) 0%, rgba(255,238,88,0.4) 50%, transparent 70%)",
+        }}
+      />
+      {/* Sun body pixel art */}
+      <div
+        className="absolute"
+        style={{
+          top: "8%",
+          right: "12%",
+          marginTop: 8,
+          marginRight: 8,
           width: 1,
           height: 1,
           transform: "scale(3)",
           transformOrigin: "top left",
           boxShadow: `
-            2px 0px #fff7a0, 3px 0px #fff7a0, 4px 0px #fff7a0,
-            1px 1px #ffee58, 2px 1px #fff9c4, 3px 1px #fff9c4, 4px 1px #fff9c4, 5px 1px #ffee58,
-            0px 2px #ffee58, 1px 2px #fff9c4, 2px 2px #ffffff, 3px 2px #ffffff, 4px 2px #ffffff, 5px 2px #fff9c4, 6px 2px #ffee58,
-            0px 3px #ffee58, 1px 3px #fff9c4, 2px 3px #ffffff, 3px 3px #ffffff, 4px 3px #ffffff, 5px 3px #fff9c4, 6px 3px #ffee58,
-            0px 4px #ffee58, 1px 4px #fff9c4, 2px 4px #ffffff, 3px 4px #ffffff, 4px 4px #ffffff, 5px 4px #fff9c4, 6px 4px #ffee58,
-            1px 5px #ffee58, 2px 5px #fff9c4, 3px 5px #fff9c4, 4px 5px #fff9c4, 5px 5px #ffee58,
-            2px 6px #fff7a0, 3px 6px #fff7a0, 4px 6px #fff7a0
+            1px 0 #fff9c4,2px 0 #fff9c4,3px 0 #fff9c4,
+            0 1px #ffee58,1px 1px #fffde7,2px 1px #fff,3px 1px #fffde7,4px 1px #ffee58,
+            0 2px #ffee58,1px 2px #fff,2px 2px #fff,3px 2px #fff,4px 2px #ffee58,
+            0 3px #ffee58,1px 3px #fffde7,2px 3px #fff,3px 3px #fffde7,4px 3px #ffee58,
+            1px 4px #fff9c4,2px 4px #fff9c4,3px 4px #fff9c4
           `,
         }}
       />
 
-      {/* Pixel clouds */}
-      <PixelCloud top={20} left="8%" scale={1.2} className="animate-cloud-1" />
-      <PixelCloud top={40} left="35%" scale={1} className="animate-cloud-2" />
-      <PixelCloud top={15} left="62%" scale={0.8} className="animate-cloud-3" />
+      {/* Clouds */}
+      <PixelCloud top="15%" left="5%" s={1.4} cls="animate-cloud-1" />
+      <PixelCloud top="25%" left="30%" s={1} cls="animate-cloud-2" />
+      <PixelCloud top="12%" left="60%" s={0.9} cls="animate-cloud-3" />
+      <PixelCloud top="30%" left="78%" s={0.7} cls="animate-cloud-1" />
 
-      {/* Ground - green grass (left 85%) */}
+      {/* Distant mountains */}
+      <div
+        className="absolute bottom-0 left-0 w-full"
+        style={{
+          height: "45%",
+          background:
+            "linear-gradient(180deg, transparent 0%, transparent 20%, #2d5a3d 20%, #1a4a2e 50%, #16a34a 80%, #22c55e 90%, #4ade80 95%, #22c55e 100%)",
+        }}
+      />
+
+      {/* Rolling hills behind grass */}
+      <div
+        className="absolute left-0"
+        style={{
+          bottom: "25%",
+          width: "85%",
+          height: "10%",
+          borderRadius: "50% 50% 0 0",
+          background: "#1a6b30",
+        }}
+      />
+      <div
+        className="absolute"
+        style={{
+          bottom: "23%",
+          left: "20%",
+          width: "50%",
+          height: "8%",
+          borderRadius: "50% 50% 0 0",
+          background: "#1f7a38",
+        }}
+      />
+
+      {/* Main ground */}
       <div
         className="absolute bottom-0 left-0"
         style={{
           width: "85%",
-          height: 48,
-          background: "linear-gradient(180deg, #4ade80 0%, #22c55e 20%, #16a34a 60%, #15803d 100%)",
+          height: "25%",
+          background:
+            "linear-gradient(180deg, #4ade80 0%, #22c55e 15%, #16a34a 50%, #15803d 80%, #0f5c2e 100%)",
         }}
       />
 
-      {/* Grass detail pixels along the top of ground */}
-      <div
-        className="absolute left-0"
-        style={{ bottom: 48, width: "85%" }}
-      >
-        {[5, 12, 20, 28, 38, 48, 55, 65, 72, 80].map((pct, i) => (
-          <div
-            key={i}
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: `${pct}%`,
-              width: 1,
-              height: 1,
-              transform: "scale(2)",
-              transformOrigin: "bottom left",
-              boxShadow: `
-                0px -1px #4ade80, 1px -2px #4ade80, 2px -1px #22c55e,
-                ${i % 2 === 0 ? "3px -3px #4ade80, 4px -1px #22c55e" : "0px -3px #22c55e"}
-              `,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Small pixel flowers */}
-      <PixelFlower bottom={48} left="10%" color="#ef4444" />
-      <PixelFlower bottom={48} left="25%" color="#f59e0b" />
-      <PixelFlower bottom={48} left="42%" color="#ec4899" />
-      <PixelFlower bottom={48} left="60%" color="#f59e0b" />
-      <PixelFlower bottom={48} left="75%" color="#ef4444" />
-
-      {/* Cliff edge - brown rock face */}
-      <div
-        className="absolute bottom-0 right-0"
-        style={{
-          width: "15%",
-          height: "100%",
-          background: "linear-gradient(180deg, transparent 0%, transparent 50%, #92400e 50%, #78350f 70%, #451a03 100%)",
-        }}
-      />
-
-      {/* Cliff top - grass on cliff */}
-      <div
-        className="absolute right-0"
-        style={{
-          width: "15%",
-          height: 48,
-          bottom: "50%",
-          background: "linear-gradient(180deg, #4ade80 0%, #22c55e 40%, #92400e 100%)",
-        }}
-      />
-
-      {/* Rock face details */}
-      {[55, 62, 70, 78, 85].map((pctBottom, i) => (
+      {/* Grass tufts along ground top edge */}
+      {[3, 8, 14, 21, 27, 34, 40, 47, 53, 59, 66, 72, 78].map((pct, i) => (
         <div
-          key={i}
-          className="absolute right-0"
+          key={`grass-${i}`}
+          className="absolute"
           style={{
-            bottom: `${100 - pctBottom}%`,
+            bottom: "25%",
+            left: `${pct}%`,
             width: 1,
             height: 1,
-            transform: "scale(2)",
-            transformOrigin: "top left",
-            right: `${3 + (i % 3) * 4}%`,
+            transform: `scale(${2 + (i % 2)})`,
+            transformOrigin: "bottom left",
             boxShadow: `
-              0px 0px #78350f, 1px 0px #92400e, 2px 0px #78350f,
-              0px 1px #451a03, 1px 1px #78350f, 2px 1px #451a03
+              0 -1px #4ade80,1px -2px #22c55e,2px -1px #4ade80,
+              ${i % 3 === 0 ? "3px -3px #4ade80,0 -3px #22c55e,4px -1px #16a34a" : "1px -3px #4ade80"}
             `,
           }}
         />
       ))}
 
-      {/* Abyss - dark gradient at the bottom right */}
+      {/* Flowers */}
+      {[
+        ["8%", "#ef4444"],
+        ["18%", "#fbbf24"],
+        ["32%", "#ec4899"],
+        ["45%", "#8b5cf6"],
+        ["58%", "#ef4444"],
+        ["68%", "#fbbf24"],
+        ["78%", "#ec4899"],
+      ].map(([left, color], i) => (
+        <div
+          key={`flower-${i}`}
+          className="absolute"
+          style={{
+            bottom: "25%",
+            left: left as string,
+            width: 1,
+            height: 1,
+            transform: "scale(2)",
+            transformOrigin: "bottom left",
+            boxShadow: `
+              1px 0 ${color},
+              0 1px ${color},1px 1px #ffff00,2px 1px ${color},
+              1px 2px ${color},
+              1px 3px #22c55e,1px 4px #16a34a,1px 5px #15803d
+            `,
+          }}
+        />
+      ))}
+
+      {/* === CLIFF EDGE === */}
+      {/* Cliff face - layered rock */}
       <div
         className="absolute bottom-0 right-0"
         style={{
-          width: "15%",
-          height: "45%",
-          background: "linear-gradient(180deg, #451a03 0%, #1a0a00 30%, #0a0a0a 60%, #000000 100%)",
+          width: "16%",
+          height: "100%",
+          background:
+            "linear-gradient(180deg, transparent 0%, transparent 72%, #6b3a1f 72%, #8b4513 74%, #a0522d 76%, #8b4513 80%, #6b3a1f 85%, #4a2810 90%, #2d1a0a 95%, #0a0a0a 100%)",
         }}
       />
 
-      {/* Danger zone near cliff edge */}
+      {/* Grass on cliff top */}
+      <div
+        className="absolute right-0"
+        style={{
+          bottom: "25%",
+          width: "16%",
+          height: "3%",
+          background: "linear-gradient(180deg, #4ade80 0%, #22c55e 60%, #8b4513 100%)",
+        }}
+      />
+
+      {/* Rock texture details */}
+      {[
+        [30, 4],
+        [35, 8],
+        [42, 3],
+        [48, 10],
+        [55, 6],
+        [62, 2],
+        [68, 9],
+        [75, 5],
+        [82, 7],
+        [88, 3],
+      ].map(([yOff, xOff], i) => (
+        <div
+          key={`rock-${i}`}
+          className="absolute"
+          style={{
+            bottom: `${yOff}%`,
+            right: `${xOff}%`,
+            width: i % 2 === 0 ? 4 : 3,
+            height: 2,
+            background: i % 3 === 0 ? "#5a3015" : i % 3 === 1 ? "#7a4a25" : "#4a2810",
+            borderRadius: 1,
+          }}
+        />
+      ))}
+
+      {/* Abyss */}
+      <div
+        className="absolute bottom-0 right-0"
+        style={{
+          width: "16%",
+          height: "25%",
+          background:
+            "linear-gradient(180deg, #3d2010 0%, #1a0a00 20%, #0a0503 50%, #000 100%)",
+        }}
+      />
+
+      {/* Danger stripe near edge */}
       <div
         className="absolute"
         style={{
-          bottom: 48,
-          right: "15%",
-          width: "10%",
-          height: 4,
-          background: "linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.3))",
+          bottom: "25%",
+          right: "16%",
+          width: "8%",
+          height: 3,
+          background:
+            "repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(239,68,68,0.4) 4px, rgba(239,68,68,0.4) 8px)",
+        }}
+      />
+
+      {/* Sign post near edge */}
+      <div
+        className="absolute"
+        style={{
+          bottom: "25%",
+          right: "18%",
+          width: 1,
+          height: 1,
+          transform: "scale(2)",
+          transformOrigin: "bottom left",
+          boxShadow: `
+            0 -8px #8b4513,0 -7px #8b4513,0 -6px #8b4513,0 -5px #8b4513,0 -4px #8b4513,0 -3px #8b4513,0 -2px #8b4513,0 -1px #8b4513,
+            -3px -12px #dc2626,-2px -12px #dc2626,-1px -12px #dc2626,0 -12px #dc2626,1px -12px #dc2626,2px -12px #dc2626,3px -12px #dc2626,
+            -3px -11px #dc2626,-2px -11px #fff,-1px -11px #fff,0 -11px #fff,1px -11px #fff,2px -11px #fff,3px -11px #dc2626,
+            -3px -10px #dc2626,-2px -10px #dc2626,-1px -10px #dc2626,0 -10px #dc2626,1px -10px #dc2626,2px -10px #dc2626,3px -10px #dc2626,
+            -3px -9px #b91c1c,-2px -9px #b91c1c,-1px -9px #b91c1c,0 -9px #b91c1c,1px -9px #b91c1c,2px -9px #b91c1c,3px -9px #b91c1c
+          `,
         }}
       />
     </div>
