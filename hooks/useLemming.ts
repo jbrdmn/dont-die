@@ -1,22 +1,25 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { type Lemming } from "@/lib/types";
-import { shouldBeDead, isSavedToday } from "@/lib/game-logic";
+import { isSavedToday } from "@/lib/game-logic";
 
 export function useLemming() {
   const [lemming, setLemming] = useState<Lemming | null>(null);
   const [loading, setLoading] = useState(true);
   const [justSaved, setJustSaved] = useState(false);
   const [justDied, setJustDied] = useState(false);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const fetchLemming = useCallback(async () => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const { data } = await supabase
       .from("lemmings")
@@ -25,15 +28,35 @@ export function useLemming() {
       .eq("is_alive", true)
       .maybeSingle();
 
-    if (data && data.is_alive && shouldBeDead(data.last_saved_date, data.born_at)) {
-      // Kill it client-side
-      await supabase.rpc("check_and_kill_lemming", {
-        p_lemming_id: data.id,
-      });
-      setJustDied(true);
-      setLemming({ ...data, is_alive: false, died_at: new Date().toISOString() });
+    if (data) {
+      // Let the server-side RPC decide if the lemming should die
+      // Only check for lemmings that have been saved before and the save is stale
+      const needsDeathCheck =
+        data.last_saved_date !== null &&
+        data.last_saved_date < new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
+
+      if (needsDeathCheck) {
+        await supabase.rpc("check_and_kill_lemming", {
+          p_lemming_id: data.id,
+        });
+        // Re-fetch to see if it was killed
+        const { data: fresh } = await supabase
+          .from("lemmings")
+          .select("*")
+          .eq("id", data.id)
+          .single();
+
+        if (fresh && !fresh.is_alive) {
+          setJustDied(true);
+          setLemming(fresh);
+        } else {
+          setLemming(fresh);
+        }
+      } else {
+        setLemming(data);
+      }
     } else {
-      setLemming(data);
+      setLemming(null);
     }
     setLoading(false);
   }, [supabase]);
@@ -52,14 +75,11 @@ export function useLemming() {
 
     if (data) {
       setLemming(data);
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 3000);
     } else {
-      // Refetch to get updated state
       await fetchLemming();
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 3000);
     }
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 3000);
   }, [lemming, supabase, fetchLemming]);
 
   const createLemming = useCallback(
