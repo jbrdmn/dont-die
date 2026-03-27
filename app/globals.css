@@ -52,7 +52,7 @@ body {
   opacity: 0;
 }
 
-/* ===== Other Character Animations ===== */
+/* ===== Character Animations ===== */
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -87,6 +87,16 @@ body {
 .animate-cloud-2 { animation: cloud-drift-2 10s ease-in-out infinite alternate; }
 .animate-cloud-3 { animation: cloud-drift-3 14s ease-in-out infinite alternate; }
 
+/* ===== Stars ===== */
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
+.animate-twinkle-delay { animation: twinkle 3s ease-in-out infinite 1.5s; }
+
 /* ===== UI Animations ===== */
 
 @keyframes save-glow {
@@ -114,8 +124,8 @@ body {
 /* ===== Landing ===== */
 
 @keyframes landing-walk {
-  0% { left: -50px; }
-  100% { left: calc(100% + 50px); }
+  0% { left: -60px; }
+  100% { left: calc(100% + 60px); }
 }
 
 .animate-landing-walk { animation: landing-walk 8s linear infinite; }
@@ -125,4 +135,14 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Reduced Motion ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

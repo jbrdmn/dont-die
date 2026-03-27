@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Press_Start_2P } from "next/font/google";
 import "./globals.css";
 
@@ -10,15 +10,29 @@ const pixelFont = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "Don't Die - Save Your Lemming",
+  title: "Don't Die",
   description:
-    "A fun browser game where you must save your lemming before midnight UTC or it walks off a cliff!",
+    "Adopt a lemming. It walks toward a cliff every day. Save it before midnight UTC or it dies forever.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Don't Die",
+  },
   openGraph: {
-    title: "Don't Die - Save Your Lemming",
+    title: "Don't Die",
     description:
       "Can you keep your lemming alive? Save it before midnight UTC every day!",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#030712",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

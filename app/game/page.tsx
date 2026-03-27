@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import LemmingScene from "@/components/LemmingScene";
 import SaveButton from "@/components/SaveButton";
 import CountdownTimer from "@/components/CountdownTimer";
@@ -9,6 +9,7 @@ import StreakCounter from "@/components/StreakCounter";
 import DeathAnimation from "@/components/DeathAnimation";
 import { useGameClock } from "@/hooks/useGameClock";
 import { useLemming } from "@/hooks/useLemming";
+import { createClient } from "@/lib/supabase/client";
 
 export default function GamePage() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function GamePage() {
   } = useLemming();
 
   const [showDeathScreen, setShowDeathScreen] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     if (justDied && !showDeathScreen) {
@@ -38,10 +40,22 @@ export default function GamePage() {
     }
   }, [loading, lemming, justDied, router]);
 
+  const handleSave = useCallback(() => {
+    // Haptic feedback on mobile
+    if (navigator.vibrate) navigator.vibrate(50);
+    saveLemming();
+  }, [saveLemming]);
+
+  const handleSignOut = useCallback(async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+  }, [router]);
+
   if (loading) {
     return (
       <main className="flex-1 flex items-center justify-center bg-gray-950">
-        <div className="pixel-font text-gray-500 animate-urgent-pulse text-sm">
+        <div className="pixel-font text-gray-600 animate-urgent-pulse" style={{ fontSize: 10 }}>
           Loading...
         </div>
       </main>
@@ -94,9 +108,35 @@ export default function GamePage() {
             href="/graveyard"
             className="pixel-font text-gray-700 hover:text-gray-500 transition-colors"
             style={{ fontSize: 10 }}
+            title="Graveyard"
           >
             &#9760;
           </a>
+          {/* Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className="pixel-font text-gray-700 hover:text-gray-500 transition-colors"
+              style={{ fontSize: 12 }}
+              title="Menu"
+            >
+              &#8942;
+            </button>
+            {showMenu && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                <div className="absolute right-0 top-full mt-2 z-50 bg-gray-900 border border-gray-800 rounded-xl py-1 min-w-[120px] shadow-xl">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-4 py-2 pixel-font text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+                    style={{ fontSize: 8 }}
+                  >
+                    SIGN OUT
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -108,6 +148,7 @@ export default function GamePage() {
             savedToday={savedToday}
             isAlive={lemming.is_alive}
             justDied={justDied}
+            justSaved={justSaved}
           />
         </div>
       </div>
@@ -117,7 +158,7 @@ export default function GamePage() {
         <CountdownTimer countdown={countdown} msRemaining={msRemaining} />
 
         <SaveButton
-          onSave={saveLemming}
+          onSave={handleSave}
           disabled={savedToday || !lemming.is_alive}
           savedToday={savedToday}
           justSaved={justSaved}

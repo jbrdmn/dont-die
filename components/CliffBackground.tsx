@@ -5,11 +5,13 @@ function PixelCloud({
   left,
   s = 1,
   cls = "",
+  opacity = 1,
 }: {
   top: string;
   left: string;
   s?: number;
   cls?: string;
+  opacity?: number;
 }) {
   const w = "#fff";
   const c = "#e0e8f0";
@@ -22,6 +24,7 @@ function PixelCloud({
         left,
         width: 1,
         height: 1,
+        opacity,
         transform: `scale(${3 * s})`,
         transformOrigin: "top left",
         boxShadow: `
@@ -36,84 +39,215 @@ function PixelCloud({
   );
 }
 
-export default function CliffBackground() {
+// Lerp between two hex colors
+function lerpColor(a: string, b: string, t: number): string {
+  const parse = (h: string) => [
+    parseInt(h.slice(1, 3), 16),
+    parseInt(h.slice(3, 5), 16),
+    parseInt(h.slice(5, 7), 16),
+  ];
+  const [ar, ag, ab] = parse(a);
+  const [br, bg, bb] = parse(b);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${bl.toString(16).padStart(2, "0")}`;
+}
+
+// Sky colors based on time of day (progress 0-1, midnight to midnight)
+function getSkyColors(progress: number) {
+  // Night: 0.0-0.2, Dawn: 0.2-0.35, Day: 0.35-0.65, Sunset: 0.65-0.8, Night: 0.8-1.0
+  const night = { top: "#0a0e1a", mid: "#141830", bot: "#1a1f3a" };
+  const dawn = { top: "#1a3a5c", mid: "#4a6a8f", bot: "#e8a060" };
+  const day = { top: "#1a3a5c", mid: "#5ba3d9", bot: "#b8e4f0" };
+  const sunset = { top: "#1a2040", mid: "#8b4513", bot: "#e85d3a" };
+
+  let skyTop: string, skyMid: string, skyBot: string;
+
+  if (progress < 0.2) {
+    // Deep night
+    skyTop = night.top;
+    skyMid = night.mid;
+    skyBot = night.bot;
+  } else if (progress < 0.35) {
+    // Dawn transition
+    const t = (progress - 0.2) / 0.15;
+    skyTop = lerpColor(night.top, dawn.top, t);
+    skyMid = lerpColor(night.mid, dawn.mid, t);
+    skyBot = lerpColor(night.bot, dawn.bot, t);
+  } else if (progress < 0.45) {
+    // Dawn to day
+    const t = (progress - 0.35) / 0.1;
+    skyTop = lerpColor(dawn.top, day.top, t);
+    skyMid = lerpColor(dawn.mid, day.mid, t);
+    skyBot = lerpColor(dawn.bot, day.bot, t);
+  } else if (progress < 0.65) {
+    // Full day
+    skyTop = day.top;
+    skyMid = day.mid;
+    skyBot = day.bot;
+  } else if (progress < 0.8) {
+    // Sunset
+    const t = (progress - 0.65) / 0.15;
+    skyTop = lerpColor(day.top, sunset.top, t);
+    skyMid = lerpColor(day.mid, sunset.mid, t);
+    skyBot = lerpColor(day.bot, sunset.bot, t);
+  } else if (progress < 0.9) {
+    // Sunset to night
+    const t = (progress - 0.8) / 0.1;
+    skyTop = lerpColor(sunset.top, night.top, t);
+    skyMid = lerpColor(sunset.mid, night.mid, t);
+    skyBot = lerpColor(sunset.bot, night.bot, t);
+  } else {
+    // Deep night approaching midnight
+    skyTop = night.top;
+    skyMid = night.mid;
+    skyBot = night.bot;
+  }
+
+  return { skyTop, skyMid, skyBot };
+}
+
+interface CliffBackgroundProps {
+  progress?: number;
+}
+
+export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps) {
+  const { skyTop, skyMid, skyBot } = getSkyColors(progress);
+
+  // Stars visible at night (progress < 0.25 or > 0.75)
+  const starsOpacity = progress < 0.25
+    ? 1 - progress / 0.25
+    : progress > 0.75
+    ? (progress - 0.75) / 0.25
+    : 0;
+
+  // Sun visible during day, moon at night
+  const sunOpacity = progress > 0.25 && progress < 0.75
+    ? Math.min(1, Math.min((progress - 0.25) / 0.1, (0.75 - progress) / 0.1))
+    : 0;
+
+  // Cloud opacity dims at night
+  const cloudOpacity = progress < 0.2 || progress > 0.85
+    ? 0.3
+    : progress < 0.3
+    ? 0.3 + ((progress - 0.2) / 0.1) * 0.7
+    : progress > 0.75
+    ? 0.3 + ((0.85 - progress) / 0.1) * 0.7
+    : 1;
+
+  // Ground gets darker at night
+  const isNight = progress < 0.25 || progress > 0.8;
+  const groundDarken = isNight ? 0.4 : 1;
+
   return (
     <div className="absolute inset-0 overflow-hidden select-none">
-      {/* Sky */}
+      {/* Dynamic sky */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 transition-colors duration-[3000ms]"
         style={{
-          background:
-            "linear-gradient(180deg, #1a3a5c 0%, #2d6a9f 25%, #5ba3d9 50%, #87ceeb 75%, #b8e4f0 100%)",
+          background: `linear-gradient(180deg, ${skyTop} 0%, ${skyMid} 50%, ${skyBot} 100%)`,
         }}
       />
 
-      {/* Stars */}
+      {/* Stars — visible at night */}
       {[
         [8, 5], [22, 12], [45, 3], [67, 8], [82, 14],
         [35, 18], [55, 6], [15, 20], [75, 2], [90, 10],
+        [12, 8], [40, 15], [60, 4], [28, 2], [72, 18],
+        [50, 10], [85, 6], [18, 14], [95, 12], [5, 16],
       ].map(([l, t], i) => (
         <div
           key={i}
-          className="absolute rounded-full"
+          className={`absolute rounded-full ${i % 5 === 0 ? "animate-twinkle" : i % 5 === 1 ? "animate-twinkle-delay" : ""}`}
           style={{
             left: `${l}%`,
             top: `${t}%`,
-            width: i % 3 === 0 ? 2 : 1,
-            height: i % 3 === 0 ? 2 : 1,
-            background: "#fff",
-            opacity: 0.12 + (i % 4) * 0.08,
+            width: i % 4 === 0 ? 2 : 1,
+            height: i % 4 === 0 ? 2 : 1,
+            background: i % 7 === 0 ? "#ffd700" : "#fff",
+            opacity: starsOpacity * (0.3 + (i % 4) * 0.2),
           }}
         />
       ))}
 
-      {/* Sun glow */}
-      <div
-        className="absolute"
-        style={{
-          top: "8%",
-          right: "12%",
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(255,247,160,0.9) 0%, rgba(255,238,88,0.4) 50%, transparent 70%)",
-        }}
-      />
-      {/* Sun pixel body */}
-      <div
-        className="absolute"
-        style={{
-          top: "8%",
-          right: "12%",
-          marginTop: 8,
-          marginRight: 8,
-          width: 1,
-          height: 1,
-          transform: "scale(3)",
-          transformOrigin: "top left",
-          boxShadow: `
-            1px 0 #fff9c4,2px 0 #fff9c4,3px 0 #fff9c4,
-            0 1px #ffee58,1px 1px #fffde7,2px 1px #fff,3px 1px #fffde7,4px 1px #ffee58,
-            0 2px #ffee58,1px 2px #fff,2px 2px #fff,3px 2px #fff,4px 2px #ffee58,
-            0 3px #ffee58,1px 3px #fffde7,2px 3px #fff,3px 3px #fffde7,4px 3px #ffee58,
-            1px 4px #fff9c4,2px 4px #fff9c4,3px 4px #fff9c4
-          `,
-        }}
-      />
+      {/* Moon — visible at night */}
+      {starsOpacity > 0 && (
+        <div
+          className="absolute"
+          style={{
+            top: "8%",
+            right: "15%",
+            width: 1,
+            height: 1,
+            opacity: starsOpacity * 0.9,
+            transform: "scale(3)",
+            transformOrigin: "top left",
+            boxShadow: `
+              2px 0 #e8e8f0,3px 0 #e8e8f0,4px 0 #e8e8f0,
+              1px 1px #e8e8f0,2px 1px #fff,3px 1px #fff,4px 1px #e8e8f0,5px 1px #e8e8f0,
+              1px 2px #e8e8f0,2px 2px #fff,3px 2px #fff,4px 2px #fff,5px 2px #e8e8f0,
+              1px 3px #e8e8f0,2px 3px #fff,3px 3px #e8e8f0,4px 3px #fff,5px 3px #e8e8f0,
+              2px 4px #e8e8f0,3px 4px #e8e8f0,4px 4px #e8e8f0
+            `,
+            filter: "drop-shadow(0 0 12px rgba(200,200,255,0.4))",
+          }}
+        />
+      )}
+
+      {/* Sun glow — visible during day */}
+      {sunOpacity > 0 && (
+        <>
+          <div
+            className="absolute"
+            style={{
+              top: "8%",
+              right: "12%",
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              opacity: sunOpacity,
+              background:
+                "radial-gradient(circle, rgba(255,247,160,0.9) 0%, rgba(255,238,88,0.4) 50%, transparent 70%)",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              top: "8%",
+              right: "12%",
+              marginTop: 8,
+              marginRight: 8,
+              width: 1,
+              height: 1,
+              opacity: sunOpacity,
+              transform: "scale(3)",
+              transformOrigin: "top left",
+              boxShadow: `
+                1px 0 #fff9c4,2px 0 #fff9c4,3px 0 #fff9c4,
+                0 1px #ffee58,1px 1px #fffde7,2px 1px #fff,3px 1px #fffde7,4px 1px #ffee58,
+                0 2px #ffee58,1px 2px #fff,2px 2px #fff,3px 2px #fff,4px 2px #ffee58,
+                0 3px #ffee58,1px 3px #fffde7,2px 3px #fff,3px 3px #fffde7,4px 3px #ffee58,
+                1px 4px #fff9c4,2px 4px #fff9c4,3px 4px #fff9c4
+              `,
+            }}
+          />
+        </>
+      )}
 
       {/* Clouds */}
-      <PixelCloud top="15%" left="5%" s={1.4} cls="animate-cloud-1" />
-      <PixelCloud top="25%" left="30%" s={1} cls="animate-cloud-2" />
-      <PixelCloud top="12%" left="60%" s={0.9} cls="animate-cloud-3" />
-      <PixelCloud top="30%" left="78%" s={0.7} cls="animate-cloud-1" />
+      <PixelCloud top="15%" left="5%" s={1.4} cls="animate-cloud-1" opacity={cloudOpacity} />
+      <PixelCloud top="25%" left="30%" s={1} cls="animate-cloud-2" opacity={cloudOpacity} />
+      <PixelCloud top="12%" left="60%" s={0.9} cls="animate-cloud-3" opacity={cloudOpacity} />
+      <PixelCloud top="30%" left="78%" s={0.7} cls="animate-cloud-1" opacity={cloudOpacity * 0.8} />
 
-      {/* Distant mountains — clipped to ground width so they don't bleed behind cliff */}
+      {/* Distant mountains */}
       <div
         className="absolute bottom-0 left-0"
         style={{
           width: "84%",
           height: "45%",
+          opacity: groundDarken,
           background:
             "linear-gradient(180deg, transparent 0%, transparent 20%, #2d5a3d 20%, #1a4a2e 50%, #16a34a 80%, #22c55e 90%, #4ade80 95%, #22c55e 100%)",
         }}
@@ -122,11 +256,11 @@ export default function CliffBackground() {
       {/* Rolling hills */}
       <div
         className="absolute left-0"
-        style={{ bottom: "25%", width: "84%", height: "10%", borderRadius: "50% 50% 0 0", background: "#1a6b30" }}
+        style={{ bottom: "25%", width: "84%", height: "10%", borderRadius: "50% 50% 0 0", background: "#1a6b30", opacity: groundDarken }}
       />
       <div
         className="absolute"
-        style={{ bottom: "23%", left: "20%", width: "50%", height: "8%", borderRadius: "50% 50% 0 0", background: "#1f7a38" }}
+        style={{ bottom: "23%", left: "20%", width: "50%", height: "8%", borderRadius: "50% 50% 0 0", background: "#1f7a38", opacity: groundDarken }}
       />
 
       {/* Main ground */}
@@ -135,10 +269,23 @@ export default function CliffBackground() {
         style={{
           width: "84%",
           height: "25%",
+          opacity: groundDarken,
           background:
             "linear-gradient(180deg, #4ade80 0%, #22c55e 15%, #16a34a 50%, #15803d 80%, #0f5c2e 100%)",
         }}
       />
+
+      {/* Night overlay on ground */}
+      {isNight && (
+        <div
+          className="absolute bottom-0 left-0"
+          style={{
+            width: "84%",
+            height: "25%",
+            background: "rgba(0,5,15,0.4)",
+          }}
+        />
+      )}
 
       {/* Grass tufts */}
       {[3, 8, 14, 21, 27, 34, 40, 47, 53, 59, 66, 72, 78].map((pct, i) => (
@@ -150,6 +297,7 @@ export default function CliffBackground() {
             left: `${pct}%`,
             width: 1,
             height: 1,
+            opacity: groundDarken,
             transform: `scale(${2 + (i % 2)})`,
             transformOrigin: "bottom left",
             boxShadow: `
@@ -173,6 +321,7 @@ export default function CliffBackground() {
             left: left as string,
             width: 1,
             height: 1,
+            opacity: groundDarken,
             transform: "scale(2)",
             transformOrigin: "bottom left",
             boxShadow: `
@@ -186,7 +335,6 @@ export default function CliffBackground() {
       ))}
 
       {/* === CLIFF === */}
-      {/* Cliff face — only covers the bottom portion, no transparent hack */}
       <div
         className="absolute bottom-0 right-0"
         style={{
@@ -204,11 +352,12 @@ export default function CliffBackground() {
           bottom: "25%",
           width: "16%",
           height: "3%",
+          opacity: groundDarken,
           background: "linear-gradient(180deg, #4ade80 0%, #22c55e 60%, #8b4513 100%)",
         }}
       />
 
-      {/* Rock textures on cliff */}
+      {/* Rock textures */}
       {[
         [3, 4], [7, 8], [12, 3], [16, 10], [20, 6],
       ].map(([yOff, xOff], i) => (
@@ -226,7 +375,7 @@ export default function CliffBackground() {
         />
       ))}
 
-      {/* Abyss below cliff */}
+      {/* Abyss */}
       <div
         className="absolute bottom-0 right-0"
         style={{
@@ -237,7 +386,7 @@ export default function CliffBackground() {
         }}
       />
 
-      {/* Danger cracks on ground near edge */}
+      {/* Danger cracks */}
       <div
         className="absolute"
         style={{

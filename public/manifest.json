@@ -1,0 +1,16 @@
+{
+  "name": "Don't Die",
+  "short_name": "Don't Die",
+  "description": "Save your lemming before midnight UTC or it dies forever.",
+  "start_url": "/game",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#030712",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
