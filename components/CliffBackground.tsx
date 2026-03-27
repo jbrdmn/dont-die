@@ -48,18 +48,10 @@ export default function CliffBackground() {
         }}
       />
 
-      {/* Stars (subtle, top area only) */}
+      {/* Stars */}
       {[
-        [8, 5],
-        [22, 12],
-        [45, 3],
-        [67, 8],
-        [82, 14],
-        [35, 18],
-        [55, 6],
-        [15, 20],
-        [75, 2],
-        [90, 10],
+        [8, 5], [22, 12], [45, 3], [67, 8], [82, 14],
+        [35, 18], [55, 6], [15, 20], [75, 2], [90, 10],
       ].map(([l, t], i) => (
         <div
           key={i}
@@ -70,12 +62,12 @@ export default function CliffBackground() {
             width: i % 3 === 0 ? 2 : 1,
             height: i % 3 === 0 ? 2 : 1,
             background: "#fff",
-            opacity: 0.15 + (i % 4) * 0.1,
+            opacity: 0.12 + (i % 4) * 0.08,
           }}
         />
       ))}
 
-      {/* Moon/Sun glow */}
+      {/* Sun glow */}
       <div
         className="absolute"
         style={{
@@ -88,7 +80,7 @@ export default function CliffBackground() {
             "radial-gradient(circle, rgba(255,247,160,0.9) 0%, rgba(255,238,88,0.4) 50%, transparent 70%)",
         }}
       />
-      {/* Sun body pixel art */}
+      {/* Sun pixel body */}
       <div
         className="absolute"
         style={{
@@ -126,41 +118,28 @@ export default function CliffBackground() {
         }}
       />
 
-      {/* Rolling hills behind grass */}
+      {/* Rolling hills */}
       <div
         className="absolute left-0"
-        style={{
-          bottom: "25%",
-          width: "85%",
-          height: "10%",
-          borderRadius: "50% 50% 0 0",
-          background: "#1a6b30",
-        }}
+        style={{ bottom: "25%", width: "84%", height: "10%", borderRadius: "50% 50% 0 0", background: "#1a6b30" }}
       />
       <div
         className="absolute"
-        style={{
-          bottom: "23%",
-          left: "20%",
-          width: "50%",
-          height: "8%",
-          borderRadius: "50% 50% 0 0",
-          background: "#1f7a38",
-        }}
+        style={{ bottom: "23%", left: "20%", width: "50%", height: "8%", borderRadius: "50% 50% 0 0", background: "#1f7a38" }}
       />
 
       {/* Main ground */}
       <div
         className="absolute bottom-0 left-0"
         style={{
-          width: "85%",
+          width: "84%",
           height: "25%",
           background:
             "linear-gradient(180deg, #4ade80 0%, #22c55e 15%, #16a34a 50%, #15803d 80%, #0f5c2e 100%)",
         }}
       />
 
-      {/* Grass tufts along ground top edge */}
+      {/* Grass tufts */}
       {[3, 8, 14, 21, 27, 34, 40, 47, 53, 59, 66, 72, 78].map((pct, i) => (
         <div
           key={`grass-${i}`}
@@ -182,13 +161,8 @@ export default function CliffBackground() {
 
       {/* Flowers */}
       {[
-        ["8%", "#ef4444"],
-        ["18%", "#fbbf24"],
-        ["32%", "#ec4899"],
-        ["45%", "#8b5cf6"],
-        ["58%", "#ef4444"],
-        ["68%", "#fbbf24"],
-        ["78%", "#ec4899"],
+        ["8%", "#ef4444"], ["18%", "#fbbf24"], ["32%", "#ec4899"],
+        ["45%", "#8b5cf6"], ["58%", "#ef4444"], ["68%", "#fbbf24"], ["78%", "#ec4899"],
       ].map(([left, color], i) => (
         <div
           key={`flower-${i}`}
@@ -211,7 +185,7 @@ export default function CliffBackground() {
       ))}
 
       {/* === CLIFF EDGE === */}
-      {/* Cliff face - layered rock */}
+      {/* Cliff face */}
       <div
         className="absolute bottom-0 right-0"
         style={{
@@ -233,18 +207,10 @@ export default function CliffBackground() {
         }}
       />
 
-      {/* Rock texture details */}
+      {/* Rock textures */}
       {[
-        [30, 4],
-        [35, 8],
-        [42, 3],
-        [48, 10],
-        [55, 6],
-        [62, 2],
-        [68, 9],
-        [75, 5],
-        [82, 7],
-        [88, 3],
+        [30, 4], [35, 8], [42, 3], [48, 10], [55, 6],
+        [62, 2], [68, 9], [75, 5], [82, 7], [88, 3],
       ].map(([yOff, xOff], i) => (
         <div
           key={`rock-${i}`}
@@ -260,7 +226,7 @@ export default function CliffBackground() {
         />
       ))}
 
-      {/* Abyss */}
+      {/* Abyss below cliff */}
       <div
         className="absolute bottom-0 right-0"
         style={{
@@ -271,20 +237,20 @@ export default function CliffBackground() {
         }}
       />
 
-      {/* Danger stripe near edge */}
+      {/* Danger cracks on ground near edge */}
       <div
         className="absolute"
         style={{
           bottom: "25%",
           right: "16%",
-          width: "8%",
-          height: 3,
+          width: "6%",
+          height: 4,
           background:
-            "repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(239,68,68,0.4) 4px, rgba(239,68,68,0.4) 8px)",
+            "repeating-linear-gradient(90deg, transparent 0px, transparent 3px, rgba(239,68,68,0.3) 3px, rgba(239,68,68,0.3) 6px)",
         }}
       />
 
-      {/* Sign post near edge */}
+      {/* Warning sign */}
       <div
         className="absolute"
         style={{
@@ -301,6 +267,18 @@ export default function CliffBackground() {
             -3px -10px #dc2626,-2px -10px #dc2626,-1px -10px #dc2626,0 -10px #dc2626,1px -10px #dc2626,2px -10px #dc2626,3px -10px #dc2626,
             -3px -9px #b91c1c,-2px -9px #b91c1c,-1px -9px #b91c1c,0 -9px #b91c1c,1px -9px #b91c1c,2px -9px #b91c1c,3px -9px #b91c1c
           `,
+        }}
+      />
+
+      {/* Edge shadow - darkening at cliff lip */}
+      <div
+        className="absolute"
+        style={{
+          bottom: "25%",
+          right: "14.5%",
+          width: "2%",
+          height: "25%",
+          background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.3))",
         }}
       />
     </div>

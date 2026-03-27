@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LemmingScene from "@/components/LemmingScene";
 import SaveButton from "@/components/SaveButton";
 import CountdownTimer from "@/components/CountdownTimer";
@@ -23,6 +23,16 @@ export default function GamePage() {
     saveLemming,
   } = useLemming();
 
+  // Show falling animation in scene before death screen
+  const [showDeathScreen, setShowDeathScreen] = useState(false);
+
+  useEffect(() => {
+    if (justDied && !showDeathScreen) {
+      const timer = setTimeout(() => setShowDeathScreen(true), 2800);
+      return () => clearTimeout(timer);
+    }
+  }, [justDied, showDeathScreen]);
+
   useEffect(() => {
     if (!loading && !lemming && !justDied) {
       router.push("/name-your-lemming");
@@ -39,13 +49,16 @@ export default function GamePage() {
     );
   }
 
-  if (justDied) {
+  if (justDied && showDeathScreen) {
     return (
       <DeathAnimation
         lemmingName={lemming?.name ?? "Your lemming"}
         streak={lemming?.streak ?? 0}
+        bornAt={lemming?.born_at ?? ""}
+        diedAt={lemming?.died_at ?? ""}
         onCreateNew={() => {
           setJustDied(false);
+          setShowDeathScreen(false);
           router.push("/name-your-lemming");
         }}
       />
@@ -54,21 +67,25 @@ export default function GamePage() {
 
   if (!lemming) return null;
 
+  const isUrgent = msRemaining < 3600000;
+
   return (
     <main className="flex-1 flex flex-col bg-gray-950 overflow-hidden">
       {/* Top bar: name + streak */}
       <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <div
-            className="w-2 h-2 rounded-full"
+            className="w-2 h-2 rounded-full shrink-0"
             style={{
-              background: savedToday ? "#22c55e" : "#ef4444",
+              background: savedToday ? "#22c55e" : isUrgent ? "#ef4444" : "#f59e0b",
               boxShadow: savedToday
                 ? "0 0 6px #22c55e"
-                : "0 0 6px #ef4444",
+                : isUrgent
+                ? "0 0 8px #ef4444"
+                : "0 0 6px #f59e0b",
             }}
           />
-          <h1 className="pixel-font text-white text-sm sm:text-base truncate max-w-[140px]">
+          <h1 className="pixel-font text-white text-sm truncate">
             {lemming.name}
           </h1>
         </div>
@@ -82,7 +99,7 @@ export default function GamePage() {
             progress={progress}
             savedToday={savedToday}
             isAlive={lemming.is_alive}
-            justDied={false}
+            justDied={justDied}
           />
         </div>
       </div>

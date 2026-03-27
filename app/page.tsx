@@ -8,14 +8,14 @@ export default function LandingPage() {
         {/* Title */}
         <div className="space-y-6">
           <h1
-            className="pixel-font text-white text-4xl sm:text-5xl"
-            style={{ textShadow: "0 0 40px rgba(239,68,68,0.2)" }}
+            className="pixel-font text-white text-4xl sm:text-5xl tracking-wider"
+            style={{ textShadow: "0 0 40px rgba(239,68,68,0.15)" }}
           >
             DON&apos;T DIE
           </h1>
 
           {/* Walking lemming */}
-          <div className="relative h-14 w-full overflow-hidden rounded-xl bg-gray-900/50 border border-gray-800/50">
+          <div className="relative h-14 w-full overflow-hidden rounded-2xl bg-gray-900/40 border border-gray-800/40">
             <LandingLemming />
           </div>
 
