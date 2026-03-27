@@ -17,21 +17,21 @@ export default function CountdownTimer({
     : countdown;
 
   return (
-    <div className="text-center">
+    <div className="text-center space-y-1">
       <div
-        className={`pixel-font font-bold tabular-nums ${
+        className={`pixel-font font-bold tabular-nums tracking-wider ${
           isDanger
-            ? "text-red-500 animate-danger-shake text-2xl sm:text-3xl"
+            ? "text-red-500 animate-danger-shake text-xl"
             : isUrgent
-            ? "text-orange-400 animate-urgent-pulse text-lg sm:text-xl"
-            : "text-gray-400 text-base sm:text-lg"
+            ? "text-orange-400 animate-urgent-pulse text-lg"
+            : "text-gray-300 text-base"
         }`}
         style={isDanger ? { textShadow: "0 0 20px rgba(239,68,68,0.5)" } : undefined}
       >
         {display}
       </div>
       <div
-        className={`pixel-font mt-0.5 ${isDanger ? "text-red-600" : "text-gray-700"}`}
+        className={`pixel-font ${isDanger ? "text-red-500/60" : "text-gray-600"}`}
         style={{ fontSize: 7 }}
       >
         {isDanger ? "SECONDS LEFT" : "UNTIL MIDNIGHT UTC"}
