@@ -108,10 +108,11 @@ export default function CliffBackground() {
       <PixelCloud top="12%" left="60%" s={0.9} cls="animate-cloud-3" />
       <PixelCloud top="30%" left="78%" s={0.7} cls="animate-cloud-1" />
 
-      {/* Distant mountains */}
+      {/* Distant mountains — clipped to ground width so they don't bleed behind cliff */}
       <div
-        className="absolute bottom-0 left-0 w-full"
+        className="absolute bottom-0 left-0"
         style={{
+          width: "84%",
           height: "45%",
           background:
             "linear-gradient(180deg, transparent 0%, transparent 20%, #2d5a3d 20%, #1a4a2e 50%, #16a34a 80%, #22c55e 90%, #4ade80 95%, #22c55e 100%)",
@@ -184,15 +185,15 @@ export default function CliffBackground() {
         />
       ))}
 
-      {/* === CLIFF EDGE === */}
-      {/* Cliff face */}
+      {/* === CLIFF === */}
+      {/* Cliff face — only covers the bottom portion, no transparent hack */}
       <div
         className="absolute bottom-0 right-0"
         style={{
           width: "16%",
-          height: "100%",
+          height: "28%",
           background:
-            "linear-gradient(180deg, transparent 0%, transparent 72%, #6b3a1f 72%, #8b4513 74%, #a0522d 76%, #8b4513 80%, #6b3a1f 85%, #4a2810 90%, #2d1a0a 95%, #0a0a0a 100%)",
+            "linear-gradient(180deg, #8b4513 0%, #a0522d 8%, #8b4513 20%, #6b3a1f 40%, #4a2810 65%, #2d1a0a 85%, #0a0a0a 100%)",
         }}
       />
 
@@ -207,10 +208,9 @@ export default function CliffBackground() {
         }}
       />
 
-      {/* Rock textures */}
+      {/* Rock textures on cliff */}
       {[
-        [30, 4], [35, 8], [42, 3], [48, 10], [55, 6],
-        [62, 2], [68, 9], [75, 5], [82, 7], [88, 3],
+        [3, 4], [7, 8], [12, 3], [16, 10], [20, 6],
       ].map(([yOff, xOff], i) => (
         <div
           key={`rock-${i}`}
@@ -267,18 +267,6 @@ export default function CliffBackground() {
             -3px -10px #dc2626,-2px -10px #dc2626,-1px -10px #dc2626,0 -10px #dc2626,1px -10px #dc2626,2px -10px #dc2626,3px -10px #dc2626,
             -3px -9px #b91c1c,-2px -9px #b91c1c,-1px -9px #b91c1c,0 -9px #b91c1c,1px -9px #b91c1c,2px -9px #b91c1c,3px -9px #b91c1c
           `,
-        }}
-      />
-
-      {/* Edge shadow - darkening at cliff lip */}
-      <div
-        className="absolute"
-        style={{
-          bottom: "25%",
-          right: "14.5%",
-          width: "2%",
-          height: "25%",
-          background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.3))",
         }}
       />
     </div>

@@ -21,7 +21,7 @@ function PixelSkull() {
       style={{
         width: 1,
         height: 1,
-        transform: "scale(5)",
+        transform: "scale(6)",
         transformOrigin: "top left",
         boxShadow: `
           3px 0 ${W},4px 0 ${W},5px 0 ${W},6px 0 ${W},7px 0 ${W},
@@ -54,9 +54,9 @@ export default function DeathAnimation({
 
   return (
     <main className="flex-1 flex items-center justify-center bg-gray-950 p-4">
-      <div className="max-w-sm w-full text-center space-y-8 animate-[fadeIn_0.5s_ease-out]">
+      <div className="max-w-sm w-full text-center space-y-6 animate-[fadeIn_0.5s_ease-out]">
         {/* Pixel skull */}
-        <div className="relative inline-block" style={{ width: 50, height: 45 }}>
+        <div className="relative inline-block" style={{ width: 60, height: 54 }}>
           <div
             className="animate-bounce"
             style={{ filter: "drop-shadow(0 0 30px rgba(239,68,68,0.3))" }}
@@ -90,7 +90,7 @@ export default function DeathAnimation({
         <div className="space-y-3 pt-2">
           <button
             onClick={onCreateNew}
-            className="w-full pixel-font bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-6 py-4 rounded-2xl text-sm transition-all border border-gray-700 hover:border-gray-600 touch-manipulation active:scale-[0.97]"
+            className="w-full pixel-font bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-6 py-3 rounded-xl text-xs transition-all border border-gray-700 hover:border-gray-600 touch-manipulation active:scale-[0.97]"
           >
             TRY AGAIN
           </button>

@@ -59,7 +59,7 @@ export default function AuthForm() {
     <div className="space-y-4 w-full max-w-sm">
       <button
         onClick={signInWithGoogle}
-        className="w-full pixel-font bg-white hover:bg-gray-100 text-gray-800 px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 transition-all touch-manipulation active:scale-[0.97]"
+        className="w-full pixel-font bg-white hover:bg-gray-100 text-gray-800 px-6 py-3 rounded-2xl text-sm flex items-center justify-center gap-2 transition-all touch-manipulation active:scale-[0.97]"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -82,7 +82,7 @@ export default function AuthForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="email"
-          className="w-full px-4 py-3.5 bg-gray-900 border border-gray-800 rounded-2xl pixel-font text-white text-center text-sm focus:border-gray-600 focus:outline-none transition-colors placeholder:text-gray-700"
+          className="w-full px-4 py-3 bg-gray-900 border border-gray-800 rounded-2xl pixel-font text-white text-center text-sm focus:border-gray-600 focus:outline-none transition-colors placeholder:text-gray-700"
         />
         <input
           type="password"
@@ -90,7 +90,7 @@ export default function AuthForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="password"
           minLength={6}
-          className="w-full px-4 py-3.5 bg-gray-900 border border-gray-800 rounded-2xl pixel-font text-white text-center text-sm focus:border-gray-600 focus:outline-none transition-colors placeholder:text-gray-700"
+          className="w-full px-4 py-3 bg-gray-900 border border-gray-800 rounded-2xl pixel-font text-white text-center text-sm focus:border-gray-600 focus:outline-none transition-colors placeholder:text-gray-700"
         />
         {error && (
           <div className="pixel-font text-red-400 text-center" style={{ fontSize: 9 }}>
@@ -100,7 +100,7 @@ export default function AuthForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full pixel-font bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:text-gray-700 text-white px-6 py-3.5 rounded-2xl text-sm transition-all touch-manipulation active:scale-[0.97] border border-gray-700 disabled:border-gray-800"
+          className="w-full pixel-font bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:text-gray-700 text-white px-6 py-3 rounded-2xl text-sm transition-all touch-manipulation active:scale-[0.97] border border-gray-700 disabled:border-gray-800"
         >
           {loading ? "..." : isSignUp ? "SIGN UP" : "SIGN IN"}
         </button>

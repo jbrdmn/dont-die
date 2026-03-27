@@ -23,7 +23,6 @@ export default function GamePage() {
     saveLemming,
   } = useLemming();
 
-  // Show falling animation in scene before death screen
   const [showDeathScreen, setShowDeathScreen] = useState(false);
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function GamePage() {
 
   return (
     <main className="flex-1 flex flex-col bg-gray-950 overflow-hidden">
-      {/* Top bar: name + streak */}
+      {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2 min-w-0">
           <div
@@ -89,10 +88,19 @@ export default function GamePage() {
             {lemming.name}
           </h1>
         </div>
-        <StreakCounter streak={lemming.streak} />
+        <div className="flex items-center gap-3">
+          <StreakCounter streak={lemming.streak} />
+          <a
+            href="/graveyard"
+            className="pixel-font text-gray-700 hover:text-gray-500 transition-colors"
+            style={{ fontSize: 10 }}
+          >
+            &#9760;
+          </a>
+        </div>
       </div>
 
-      {/* Scene - the hero */}
+      {/* Scene */}
       <div className="flex-1 flex items-center px-3">
         <div className="w-full max-w-2xl mx-auto">
           <LemmingScene
@@ -104,31 +112,16 @@ export default function GamePage() {
         </div>
       </div>
 
-      {/* Bottom area: timer + save */}
-      <div className="px-4 pb-4 pt-2 space-y-3">
+      {/* Bottom controls */}
+      <div className="px-4 pb-4 pt-2 space-y-2">
         <CountdownTimer countdown={countdown} msRemaining={msRemaining} />
 
         <SaveButton
           onSave={saveLemming}
           disabled={savedToday || !lemming.is_alive}
           savedToday={savedToday}
+          justSaved={justSaved}
         />
-
-        {justSaved && (
-          <div className="text-center pixel-font text-green-400 animate-urgent-pulse" style={{ fontSize: 10 }}>
-            Safe! See you tomorrow.
-          </div>
-        )}
-
-        <div className="text-center pt-1 pb-1">
-          <a
-            href="/graveyard"
-            className="pixel-font text-gray-700 hover:text-gray-500 transition-colors"
-            style={{ fontSize: 8 }}
-          >
-            GRAVEYARD
-          </a>
-        </div>
       </div>
     </main>
   );

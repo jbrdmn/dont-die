@@ -98,23 +98,23 @@ const fallingPixels = `
   1px 11px ${SD},10px 11px ${SD}
 `;
 
+const sc = 6;
+
 export default function Lemming({ state, progress }: LemmingProps) {
   const leftPercent = state === "sleeping" ? 5 : Math.min(progress * 82, 82);
   const isPanic = progress > 0.85 && state === "walking";
   const actual = isPanic ? "panic" : state;
-  const sc = 4;
 
   return (
     <div
       className="absolute transition-all duration-1000 ease-linear"
       style={{
         left: `${leftPercent}%`,
-        bottom: actual === "sleeping" ? "24%" : "25%",
+        bottom: actual === "sleeping" ? "22%" : "23%",
       }}
     >
       {actual === "walking" && (
         <div style={{ width: 13 * sc, height: 13 * sc, position: "relative" }}>
-          {/* Two-frame animation via CSS */}
           <div
             className="animate-walk-frame1"
             style={{
@@ -144,9 +144,9 @@ export default function Lemming({ state, progress }: LemmingProps) {
               boxShadow: sleepPixels,
             }}
           />
-          <span className="absolute pixel-font text-white animate-zzz" style={{ top: -12, right: -4, fontSize: 10, opacity: 0.8 }}>z</span>
-          <span className="absolute pixel-font text-white animate-zzz-delay" style={{ top: -22, right: -12, fontSize: 13, opacity: 0.6 }}>z</span>
-          <span className="absolute pixel-font text-white animate-zzz-delay2" style={{ top: -34, right: -18, fontSize: 16, opacity: 0.4 }}>Z</span>
+          <span className="absolute pixel-font text-white animate-zzz" style={{ top: -16, right: -6, fontSize: 14, opacity: 0.8 }}>z</span>
+          <span className="absolute pixel-font text-white animate-zzz-delay" style={{ top: -30, right: -16, fontSize: 18, opacity: 0.6 }}>z</span>
+          <span className="absolute pixel-font text-white animate-zzz-delay2" style={{ top: -48, right: -24, fontSize: 22, opacity: 0.4 }}>Z</span>
         </div>
       )}
 
@@ -159,10 +159,9 @@ export default function Lemming({ state, progress }: LemmingProps) {
               boxShadow: panicPixels,
             }}
           />
-          {/* Fast alternating legs */}
           <div className="animate-panic-legs-a" style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1, transform: `scale(${sc})`, transformOrigin: "top left", boxShadow: panicLegsA }} />
           <div className="animate-panic-legs-b" style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1, transform: `scale(${sc})`, transformOrigin: "top left", boxShadow: panicLegsB }} />
-          <span className="absolute pixel-font text-red-500 animate-urgent-pulse" style={{ top: -20, left: "50%", transform: "translateX(-50%)", fontSize: 12, textShadow: "0 0 8px rgba(239,68,68,0.6)" }}>!!</span>
+          <span className="absolute pixel-font text-red-500 animate-urgent-pulse" style={{ top: -28, left: "50%", transform: "translateX(-50%)", fontSize: 16, textShadow: "0 0 10px rgba(239,68,68,0.6)" }}>!!</span>
         </div>
       )}
 

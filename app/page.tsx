@@ -4,9 +4,9 @@ import LandingLemming from "@/components/LandingLemming";
 export default function LandingPage() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center p-4 bg-gray-950">
-      <div className="max-w-sm w-full space-y-10 text-center">
+      <div className="max-w-sm w-full space-y-8 text-center">
         {/* Title */}
-        <div className="space-y-6">
+        <div className="space-y-5">
           <h1
             className="pixel-font text-white text-4xl sm:text-5xl tracking-wider"
             style={{ textShadow: "0 0 40px rgba(239,68,68,0.15)" }}
@@ -15,7 +15,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Walking lemming */}
-          <div className="relative h-14 w-full overflow-hidden rounded-2xl bg-gray-900/40 border border-gray-800/40">
+          <div className="relative h-16 w-full overflow-hidden rounded-2xl bg-gray-900/40 border border-gray-800/40">
             <LandingLemming />
           </div>
 

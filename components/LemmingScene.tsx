@@ -24,7 +24,7 @@ export default function LemmingScene({
   return (
     <div
       className="relative w-full rounded-2xl overflow-hidden border-2 border-gray-700/50 shadow-2xl shadow-black/50"
-      style={{ height: "clamp(280px, 50vh, 420px)" }}
+      style={{ height: "clamp(300px, 55vh, 480px)" }}
     >
       <CliffBackground />
       <Lemming state={state} progress={progress} />

@@ -42,7 +42,7 @@ const walk2 = `
 `;
 
 export default function LandingLemming() {
-  const sc = 3;
+  const sc = 4;
   return (
     <div className="absolute animate-landing-walk" style={{ top: "50%", transform: "translateY(-50%)" }}>
       <div style={{ width: 13 * sc, height: 13 * sc, position: "relative" }}>

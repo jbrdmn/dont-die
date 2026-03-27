@@ -12,7 +12,6 @@ export default function CountdownTimer({
   const isUrgent = msRemaining < 3600000;
   const isDanger = msRemaining < 600000;
 
-  // Show raw seconds in danger mode for drama
   const display = isDanger
     ? String(Math.ceil(msRemaining / 1000))
     : countdown;
@@ -22,18 +21,18 @@ export default function CountdownTimer({
       <div
         className={`pixel-font font-bold tabular-nums ${
           isDanger
-            ? "text-red-500 animate-danger-shake text-3xl sm:text-4xl"
+            ? "text-red-500 animate-danger-shake text-2xl sm:text-3xl"
             : isUrgent
-            ? "text-orange-400 animate-urgent-pulse text-2xl sm:text-3xl"
-            : "text-gray-400 text-xl sm:text-2xl"
+            ? "text-orange-400 animate-urgent-pulse text-lg sm:text-xl"
+            : "text-gray-400 text-base sm:text-lg"
         }`}
         style={isDanger ? { textShadow: "0 0 20px rgba(239,68,68,0.5)" } : undefined}
       >
         {display}
       </div>
       <div
-        className={`pixel-font mt-1 ${isDanger ? "text-red-600" : "text-gray-700"}`}
-        style={{ fontSize: 8 }}
+        className={`pixel-font mt-0.5 ${isDanger ? "text-red-600" : "text-gray-700"}`}
+        style={{ fontSize: 7 }}
       >
         {isDanger ? "SECONDS LEFT" : "UNTIL MIDNIGHT UTC"}
       </div>
