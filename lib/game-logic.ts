@@ -28,8 +28,12 @@ export function isSavedToday(lastSavedDate: string | null): boolean {
 }
 
 /** Whether the lemming should be dead (last saved before yesterday) */
-export function shouldBeDead(lastSavedDate: string | null): boolean {
-  if (!lastSavedDate) return true;
+export function shouldBeDead(lastSavedDate: string | null, bornAt: string): boolean {
+  if (!lastSavedDate) {
+    // Never saved — only dead if born before today (got through a full day without saving)
+    const bornDate = bornAt.slice(0, 10);
+    return bornDate < todayUTC();
+  }
   const yesterday = new Date();
   yesterday.setUTCDate(yesterday.getUTCDate() - 1);
   const yesterdayStr = yesterday.toISOString().slice(0, 10);

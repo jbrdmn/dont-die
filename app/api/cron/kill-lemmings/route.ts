@@ -26,12 +26,14 @@ export async function GET(request: Request) {
     .lt("last_saved_date", yesterdayStr)
     .select("id");
 
-  // Also kill lemmings that were never saved
+  // Also kill lemmings that were never saved AND born before today
+  const todayStr = new Date().toISOString().slice(0, 10);
   const { data: neverSaved } = await supabase
     .from("lemmings")
     .update({ is_alive: false, died_at: new Date().toISOString() })
     .eq("is_alive", true)
     .is("last_saved_date", null)
+    .lt("born_at", todayStr)
     .select("id");
 
   const killed = (data?.length ?? 0) + (neverSaved?.length ?? 0);

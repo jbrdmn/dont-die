@@ -25,7 +25,7 @@ export function useLemming() {
       .eq("is_alive", true)
       .maybeSingle();
 
-    if (data && data.is_alive && shouldBeDead(data.last_saved_date)) {
+    if (data && data.is_alive && shouldBeDead(data.last_saved_date, data.born_at)) {
       // Kill it client-side
       await supabase.rpc("check_and_kill_lemming", {
         p_lemming_id: data.id,
