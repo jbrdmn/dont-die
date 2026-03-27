@@ -19,10 +19,13 @@ export default function LemmingScene({
   let state: LemmingState = "walking";
   if (!isAlive || justDied) state = "falling";
   else if (savedToday) state = "sleeping";
-  else if (progress > 0.9) state = "panic";
+  else if (progress > 0.85) state = "panic";
 
   return (
-    <div className="relative w-full h-48 sm:h-64 rounded-xl overflow-hidden border-4 border-gray-800 shadow-xl image-rendering-pixelated">
+    <div
+      className="relative w-full rounded-xl overflow-hidden border-4 border-gray-800 shadow-xl image-rendering-pixelated"
+      style={{ height: "clamp(256px, 45vw, 384px)" }}
+    >
       <CliffBackground />
       <Lemming state={state} progress={progress} />
     </div>

@@ -1,18 +1,25 @@
 import AuthForm from "@/components/AuthForm";
+import LandingLemming from "@/components/LandingLemming";
 
 export default function LandingPage() {
   return (
-    <main className="flex-1 flex flex-col items-center justify-center p-6">
+    <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6">
       <div className="max-w-lg w-full space-y-8 text-center">
-        <div className="space-y-4">
+        <div className="space-y-6">
           <h1 className="text-3xl sm:text-5xl pixel-font text-white leading-relaxed">
             DON&apos;T DIE
           </h1>
-          <div className="text-5xl">🐹</div>
-          <p className="pixel-font text-gray-400 text-xs sm:text-sm leading-relaxed">
+
+          {/* Animated pixel lemming walking across */}
+          <div className="relative h-16 w-full overflow-hidden">
+            <LandingLemming />
+          </div>
+
+          <p className="pixel-font text-gray-400 text-xs leading-relaxed px-2">
             Adopt a lemming. It walks toward a cliff every day.
             <br />
-            Press SAVE before midnight UTC or it dies.
+            <span className="text-red-400">Press SAVE</span> before midnight
+            UTC or it dies.
           </p>
         </div>
 

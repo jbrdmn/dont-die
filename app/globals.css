@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -14,41 +13,26 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Press Start 2P", monospace;
 }
 
 .pixel-font {
-  font-family: "Press Start 2P", monospace;
+  font-family: var(--font-pixel), monospace;
 }
 
 .image-rendering-pixelated {
   image-rendering: pixelated;
 }
 
-/* Animations */
-@keyframes bounce-slow {
+/* ===== Lemming Pixel Art Animations ===== */
+
+@keyframes walk-legs {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes walk-bob {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-}
-
-@keyframes walk-left {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-
-@keyframes walk-right {
-  0%, 100% { transform: translateY(-3px); }
-  50% { transform: translateY(0); }
-}
-
-@keyframes walk-fast-left {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-@keyframes walk-fast-right {
-  0%, 100% { transform: translateY(-4px); }
-  50% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
 }
 
 @keyframes shake {
@@ -57,71 +41,132 @@ body {
   75% { transform: translateX(2px); }
 }
 
-@keyframes fall {
+@keyframes fall-tumble {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(200px) rotate(720deg); opacity: 0; }
+  100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
 }
 
-@keyframes cloud-slow {
+@keyframes zzz-float {
+  0% { transform: translateY(0) translateX(0); opacity: 1; }
+  100% { transform: translateY(-12px) translateX(6px); opacity: 0; }
+}
+
+@keyframes panic-eyes {
+  0%, 90% { transform: scale(1); }
+  95% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ===== Cloud Animations ===== */
+
+@keyframes cloud-drift-1 {
   0% { transform: translateX(0); }
-  100% { transform: translateX(20px); }
+  100% { transform: translateX(30px); }
 }
 
-@keyframes cloud-med {
+@keyframes cloud-drift-2 {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-15px); }
+  100% { transform: translateX(-20px); }
 }
 
-@keyframes cloud-fast {
+@keyframes cloud-drift-3 {
   0% { transform: translateX(0); }
-  100% { transform: translateX(25px); }
+  100% { transform: translateX(40px); }
 }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.02); }
+/* ===== Button Animations ===== */
+
+@keyframes save-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3), 0 0 60px rgba(239, 68, 68, 0.1); }
 }
 
-.animate-bounce-slow {
-  animation: bounce-slow 0.6s ease-in-out infinite;
+@keyframes save-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
-.animate-walk-left {
-  animation: walk-left 0.4s ease-in-out infinite;
+/* ===== Countdown Animations ===== */
+
+@keyframes urgent-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-.animate-walk-right {
-  animation: walk-right 0.4s ease-in-out infinite;
+@keyframes danger-shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-1px); }
+  30% { transform: translateX(1px); }
+  50% { transform: translateX(-1px); }
+  70% { transform: translateX(1px); }
+  90% { transform: translateX(-1px); }
 }
 
-.animate-walk-fast-left {
-  animation: walk-fast-left 0.2s ease-in-out infinite;
+/* ===== Landing Page Animations ===== */
+
+@keyframes landing-walk {
+  0% { left: -40px; }
+  100% { left: calc(100% + 40px); }
 }
 
-.animate-walk-fast-right {
-  animation: walk-fast-right 0.2s ease-in-out infinite;
+/* ===== Utility Classes ===== */
+
+.animate-walk-bob {
+  animation: walk-bob 0.4s ease-in-out infinite;
+}
+
+.animate-walk-legs-a {
+  animation: walk-legs 0.3s ease-in-out infinite;
+}
+
+.animate-walk-legs-b {
+  animation: walk-legs 0.3s ease-in-out infinite 0.15s;
 }
 
 .animate-shake {
   animation: shake 0.15s ease-in-out infinite;
 }
 
-.animate-fall {
-  animation: fall 2s ease-in forwards;
+.animate-fall-tumble {
+  animation: fall-tumble 2s ease-in forwards;
 }
 
-.animate-cloud-slow {
-  animation: cloud-slow 8s ease-in-out infinite alternate;
+.animate-zzz {
+  animation: zzz-float 2s ease-out infinite;
 }
 
-.animate-cloud-med {
-  animation: cloud-med 6s ease-in-out infinite alternate;
+.animate-zzz-delay {
+  animation: zzz-float 2s ease-out infinite 0.7s;
 }
 
-.animate-cloud-fast {
-  animation: cloud-fast 4s ease-in-out infinite alternate;
+.animate-zzz-delay2 {
+  animation: zzz-float 2s ease-out infinite 1.4s;
 }
 
-.animate-pulse-slow {
-  animation: pulse-slow 2s ease-in-out infinite;
+.animate-cloud-1 {
+  animation: cloud-drift-1 10s ease-in-out infinite alternate;
+}
+
+.animate-cloud-2 {
+  animation: cloud-drift-2 8s ease-in-out infinite alternate;
+}
+
+.animate-cloud-3 {
+  animation: cloud-drift-3 12s ease-in-out infinite alternate;
+}
+
+.animate-save-glow {
+  animation: save-glow 2s ease-in-out infinite, save-pulse 2s ease-in-out infinite;
+}
+
+.animate-urgent-pulse {
+  animation: urgent-pulse 1s ease-in-out infinite;
+}
+
+.animate-danger-shake {
+  animation: danger-shake 0.5s ease-in-out infinite, urgent-pulse 0.5s ease-in-out infinite;
+}
+
+.animate-landing-walk {
+  animation: landing-walk 8s linear infinite;
 }
