@@ -246,7 +246,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
         className="absolute bottom-0 left-0"
         style={{
           width: "84%",
-          height: "45%",
+          height: "55%",
           opacity: groundDarken,
           background:
             "linear-gradient(180deg, transparent 0%, transparent 20%, #2d5a3d 20%, #1a4a2e 50%, #16a34a 80%, #22c55e 90%, #4ade80 95%, #22c55e 100%)",
@@ -256,11 +256,11 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
       {/* Rolling hills */}
       <div
         className="absolute left-0"
-        style={{ bottom: "25%", width: "84%", height: "10%", borderRadius: "50% 50% 0 0", background: "#1a6b30", opacity: groundDarken }}
+        style={{ bottom: "38%", width: "84%", height: "10%", borderRadius: "50% 50% 0 0", background: "#1a6b30", opacity: groundDarken }}
       />
       <div
         className="absolute"
-        style={{ bottom: "23%", left: "20%", width: "50%", height: "8%", borderRadius: "50% 50% 0 0", background: "#1f7a38", opacity: groundDarken }}
+        style={{ bottom: "36%", left: "20%", width: "50%", height: "8%", borderRadius: "50% 50% 0 0", background: "#1f7a38", opacity: groundDarken }}
       />
 
       {/* Main ground */}
@@ -268,7 +268,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
         className="absolute bottom-0 left-0"
         style={{
           width: "84%",
-          height: "25%",
+          height: "38%",
           opacity: groundDarken,
           background:
             "linear-gradient(180deg, #4ade80 0%, #22c55e 15%, #16a34a 50%, #15803d 80%, #0f5c2e 100%)",
@@ -281,7 +281,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
           className="absolute bottom-0 left-0"
           style={{
             width: "84%",
-            height: "25%",
+            height: "38%",
             background: "rgba(0,5,15,0.4)",
           }}
         />
@@ -293,7 +293,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
           key={`grass-${i}`}
           className="absolute"
           style={{
-            bottom: "25%",
+            bottom: "38%",
             left: `${pct}%`,
             width: 1,
             height: 1,
@@ -317,7 +317,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
           key={`flower-${i}`}
           className="absolute"
           style={{
-            bottom: "25%",
+            bottom: "38%",
             left: left as string,
             width: 1,
             height: 1,
@@ -339,7 +339,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
         className="absolute bottom-0 right-0"
         style={{
           width: "16%",
-          height: "28%",
+          height: "40%",
           background:
             "linear-gradient(180deg, #8b4513 0%, #a0522d 8%, #8b4513 20%, #6b3a1f 40%, #4a2810 65%, #2d1a0a 85%, #0a0a0a 100%)",
         }}
@@ -380,7 +380,7 @@ export default function CliffBackground({ progress = 0.5 }: CliffBackgroundProps
         className="absolute bottom-0 right-0"
         style={{
           width: "16%",
-          height: "25%",
+          height: "38%",
           background:
             "linear-gradient(180deg, #3d2010 0%, #1a0a00 20%, #0a0503 50%, #000 100%)",
         }}

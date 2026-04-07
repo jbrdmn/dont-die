@@ -110,7 +110,7 @@ export default function Lemming({ state, progress }: LemmingProps) {
       className="absolute transition-all duration-1000 ease-linear"
       style={{
         left: `${leftPercent}%`,
-        bottom: actual === "sleeping" ? "23%" : "24%",
+        bottom: actual === "sleeping" ? "36%" : "37%",
       }}
     >
       {actual === "walking" && (
