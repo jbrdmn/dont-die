@@ -6,6 +6,14 @@ interface NameFormProps {
   onSubmit: (name: string) => void;
 }
 
+const randomNames = [
+  "Blinky", "Stumpy", "Wobble", "Dash", "Nugget",
+  "Pickle", "Beans", "Sprout", "Ziggy", "Noodle",
+  "Muffin", "Pepper", "Gizmo", "Turbo", "Waffle",
+  "Biscuit", "Chompy", "Fizz", "Pebble", "Sparky",
+  "Tofu", "Boots", "Crumble", "Doodle", "Flip",
+];
+
 const G = "#22c55e";
 const GD = "#16a34a";
 const S = "#ffcc99";
@@ -34,18 +42,26 @@ const standingPixels = `
 export default function NameForm({ onSubmit }: NameFormProps) {
   const [name, setName] = useState("");
 
+  const randomize = () => {
+    setName(randomNames[Math.floor(Math.random() * randomNames.length)]);
+  };
+
   return (
-    <div className="space-y-8 text-center max-w-sm mx-auto">
-      <div className="space-y-4">
-        {/* Static lemming sprite */}
+    <div className="space-y-6 text-center max-w-sm mx-auto">
+      <h1 className="pixel-font text-white text-base sm:text-lg tracking-wider">
+        NAME YOUR LEMMING
+      </h1>
+
+      <div className="space-y-3">
+        {/* Lemming sprite */}
         <div className="flex justify-center" style={{ height: 52 }}>
           <div style={{ width: 1, height: 1, transform: "scale(4)", transformOrigin: "top left", boxShadow: standingPixels }} />
         </div>
-        <h1 className="pixel-font text-white text-base">Name Your Lemming</h1>
-        <p className="pixel-font text-gray-600" style={{ fontSize: 9, lineHeight: "1.6" }}>
-          This little guy is counting on you.
+
+        <p className="pixel-font text-gray-500" style={{ fontSize: 8, lineHeight: "1.8" }}>
+          Give your lemming a name.
           <br />
-          Choose wisely.
+          They&apos;ll need something to put on the tombstone.
         </p>
       </div>
 
@@ -56,23 +72,47 @@ export default function NameForm({ onSubmit }: NameFormProps) {
         }}
         className="space-y-3"
       >
-        <input
-          type="text"
-          maxLength={20}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="enter a name..."
-          className="w-full px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl pixel-font text-white text-center text-sm focus:border-green-500/60 focus:outline-none focus:ring-1 focus:ring-green-500/20 transition-all placeholder:text-gray-700"
-          autoFocus
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            maxLength={20}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter a name..."
+            className="flex-1 px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl pixel-font text-white text-center text-sm focus:border-green-500/60 focus:outline-none focus:ring-1 focus:ring-green-500/20 transition-all placeholder:text-gray-700"
+            autoFocus
+          />
+          <button
+            type="button"
+            onClick={randomize}
+            className="px-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl transition-colors touch-manipulation active:scale-95"
+            title="Random name"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="16 3 21 3 21 8" />
+              <line x1="4" y1="20" x2="21" y2="3" />
+              <polyline points="21 16 21 21 16 21" />
+              <line x1="15" y1="15" x2="21" y2="21" />
+              <line x1="4" y1="4" x2="9" y2="9" />
+            </svg>
+          </button>
+        </div>
+
         <button
           type="submit"
           disabled={!name.trim()}
-          className="w-full pixel-font bg-green-600 hover:bg-green-500 disabled:bg-gray-800 disabled:text-gray-700 text-white px-6 py-3 rounded-xl text-xs transition-all touch-manipulation active:scale-[0.97] border border-green-500/40 disabled:border-gray-700"
+          className="w-full pixel-font bg-green-600 hover:bg-green-500 disabled:bg-gray-800 disabled:text-gray-700 text-white px-6 py-3 rounded-xl text-xs transition-all touch-manipulation active:scale-[0.97] border border-green-500/40 disabled:border-gray-700 flex items-center justify-center gap-2"
         >
-          ADOPT
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          BEGIN JOURNEY
         </button>
       </form>
+
+      <p className="pixel-font text-gray-700" style={{ fontSize: 7 }}>
+        They have 24 hours. The clock starts now.
+      </p>
     </div>
   );
 }
